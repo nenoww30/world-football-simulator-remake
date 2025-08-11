@@ -69,6 +69,10 @@
         .selecao-times { display: flex; justify-content: space-around; align-items: center; margin-bottom: 1.5rem; }
         .time-box select { width: 100%; max-width: 250px; padding: 10px; background-color: #2a2a2a; color: var(--cor-texto-principal); border: 1px solid var(--cor-borda); border-radius: 8px; font-size: 16px; }
         .time-box label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .taticas-container { display: flex; gap: 2rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--cor-borda); }
+        .tatica-box { flex: 1; text-align: center; }
+        .tatica-box label { font-weight: 500; font-family: var(--font-titulo); font-size: 1.1em; }
+        .tatica-box span { color: var(--cor-amarelo); font-weight: bold; display: block; margin-top: 5px; height: 20px; }
         #lista-times-editor { text-align: left; }
         .item-time-editor { display: flex; align-items: center; padding: 1rem; background-color: #2a2a2a; border-radius: 8px; margin-bottom: 0.75rem; transition: background-color 0.3s ease; }
         .item-time-editor:hover { background-color: #343a40; }
@@ -140,7 +144,7 @@
         .jogador-stats { font-size: 0.9em; }
         .jogador-stats span { margin-right: 10px; }
         @media (max-width: 850px) {
-            .form-edicao-grid, .amistoso-filtros, .partida-corpo, .notas-container { flex-direction: column; }
+            .form-edicao-grid, .amistoso-filtros, .partida-corpo, .notas-container, .taticas-container { flex-direction: column; }
             .selecao-times {flex-direction: column; gap: 1rem;}
         }
     </style>
@@ -176,27 +180,41 @@
                 <button id="btn-voltar-amistoso" class="btn-secundario">Voltar ao Menu</button>
                 <button id="btn-ver-notas" class="btn-primario escondido">Ver Notas</button>
             </div>
-            <div id="area-resultado-amistoso" class="escondido">
-                <div class="placar-container">
-                    <div class="time-placar" id="time-placar-casa"></div>
-                    <div id="placar-central" class="placar-central">0 - 0</div>
-                    <div class="time-placar" id="time-placar-visitante"></div>
-                </div>
-                <div class="partida-corpo">
-                    <div id="log-casa" class="log-coluna"></div>
-                    <div class="stats-coluna">
-                        <div class="controle-velocidade">
-                            <button id="btn-vel-menos" class="btn-vel">-</button>
-                            <span id="display-velocidade">2x</span>
-                            <button id="btn-vel-mais" class="btn-vel">+</button>
-                        </div>
-                        <div class="stat-item"><span id="stat-chutes-casa">0</span><span>Chutes</span><span id="stat-chutes-visitante">0</span></div>
-                        <div class="stat-item"><span id="stat-chutes-gol-casa">0</span><span>Chutes a Gol</span><span id="stat-chutes-gol-visitante">0</span></div>
-                        <div class="stat-item"><span id="stat-posse-casa">50</span><span>Posse %</span><span id="stat-posse-visitante">50</span></div>
-                        <div class="stat-item"><span id="stat-amarelos-casa">0</span><span>Cartões A.</span><span id="stat-amarelos-visitante">0</span></div>
-                        <div class="stat-item"><span id="stat-vermelhos-casa">0</span><span>Cartões V.</span><span id="stat-vermelhos-visitante">0</span></div>
+            <div id="area-simulacao" class="escondido">
+                <div class="taticas-container">
+                    <div class="tatica-box">
+                        <label for="tatica-casa">Mentalidade Casa</label>
+                        <input type="range" id="tatica-casa" min="1" max="5" value="3">
+                        <span id="display-tatica-casa">Equilibrado</span>
                     </div>
-                    <div id="log-visitante" class="log-coluna"></div>
+                    <div class="tatica-box">
+                        <label for="tatica-visitante">Mentalidade Visitante</label>
+                        <input type="range" id="tatica-visitante" min="1" max="5" value="3">
+                        <span id="display-tatica-visitante">Equilibrado</span>
+                    </div>
+                </div>
+                <div id="area-resultado-amistoso">
+                    <div class="placar-container">
+                        <div class="time-placar" id="time-placar-casa"></div>
+                        <div id="placar-central" class="placar-central">0 - 0</div>
+                        <div class="time-placar" id="time-placar-visitante"></div>
+                    </div>
+                    <div class="partida-corpo">
+                        <div id="log-casa" class="log-coluna"></div>
+                        <div class="stats-coluna">
+                            <div class="controle-velocidade">
+                                <button id="btn-vel-menos" class="btn-vel">-</button>
+                                <span id="display-velocidade">2x</span>
+                                <button id="btn-vel-mais" class="btn-vel">+</button>
+                            </div>
+                            <div class="stat-item"><span id="stat-chutes-casa">0</span><span>Chutes</span><span id="stat-chutes-visitante">0</span></div>
+                            <div class="stat-item"><span id="stat-chutes-gol-casa">0</span><span>Chutes a Gol</span><span id="stat-chutes-gol-visitante">0</span></div>
+                            <div class="stat-item"><span id="stat-posse-casa">50</span><span>Posse %</span><span id="stat-posse-visitante">50</span></div>
+                            <div class="stat-item"><span id="stat-amarelos-casa">0</span><span>Cartões A.</span><span id="stat-amarelos-visitante">0</span></div>
+                            <div class="stat-item"><span id="stat-vermelhos-casa">0</span><span>Cartões V.</span><span id="stat-vermelhos-visitante">0</span></div>
+                        </div>
+                        <div id="log-visitante" class="log-coluna"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -289,6 +307,7 @@
         let timeEmEdicaoId = null;
         let escudoAtual = '⭐';
 
+        const todasAsTelas = document.querySelectorAll('main > .tela-container');
         const telaInicial = document.getElementById('tela-inicial');
         const telaAmistoso = document.getElementById('tela-amistoso');
         const telaEditor = document.getElementById('tela-editor');
@@ -331,10 +350,22 @@
         const filtroCategoriaVisitante = document.getElementById('filtro-categoria-visitante');
         const selectCasa = document.getElementById('select-casa');
         const selectVisitante = document.getElementById('select-visitante');
-        const areaResultadoAmistoso = document.getElementById('area-resultado-amistoso');
+        const areaSimulacao = document.getElementById('area-simulacao');
         const btnVelMenos = document.getElementById('btn-vel-menos');
         const btnVelMais = document.getElementById('btn-vel-mais');
         const displayVelocidade = document.getElementById('display-velocidade');
+        const taticaSliderCasa = document.getElementById('tatica-casa');
+        const taticaSliderVisitante = document.getElementById('tatica-visitante');
+        const displayTaticaCasa = document.getElementById('display-tatica-casa');
+        const displayTaticaVisitante = document.getElementById('display-tatica-visitante');
+        
+        const mentalidades = {
+            '1': { texto: 'Ultra Defensivo', modAtk: 0.6, modDef: 1.4 },
+            '2': { texto: 'Defensivo', modAtk: 0.8, modDef: 1.2 },
+            '3': { texto: 'Equilibrado', modAtk: 1.0, modDef: 1.0 },
+            '4': { texto: 'Ofensivo', modAtk: 1.2, modDef: 0.8 },
+            '5': { texto: 'Ultra Ofensivo', modAtk: 1.4, modDef: 0.6 }
+        };
 
         function salvarTimesNoLocalStorage() { localStorage.setItem('wfs_timesDB', JSON.stringify(timesDB)); }
         function carregarTimes() {
@@ -361,7 +392,7 @@
         btnEditor.addEventListener('click', () => { mostrarTela(telaEditor); mostrarContainerEditor('lista'); popularFiltroCategorias(filtroCategoriaEditor); popularListaEditor(); });
         btnVoltarDoEditor.addEventListener('click', () => mostrarTela(telaInicial));
         btnVoltarAmistoso.addEventListener('click', () => mostrarTela(telaInicial));
-        btnVoltarDasNotas.addEventListener('click', () => { mostrarTela(telaAmistoso); areaResultadoAmistoso.classList.remove('escondido'); });
+        btnVoltarDasNotas.addEventListener('click', () => { mostrarTela(telaAmistoso); areaSimulacao.classList.remove('escondido'); });
         btnCancelarEdicao.addEventListener('click', () => mostrarContainerEditor('lista'));
 
         function mostrarContainerEditor(container) {
@@ -480,7 +511,7 @@
             }
         }
         filtroCategoriaEditor.addEventListener('change', popularListaEditor);
-        function inicializarTelaAmistoso() { popularFiltroCategorias(filtroCategoriaCasa); popularFiltroCategorias(filtroCategoriaVisitante); popularSeletoresAmistoso(); areaResultadoAmistoso.classList.add('escondido'); btnVerNotas.classList.add('escondido'); }
+        function inicializarTelaAmistoso() { popularFiltroCategorias(filtroCategoriaCasa); popularFiltroCategorias(filtroCategoriaVisitante); popularSeletoresAmistoso(); areaSimulacao.classList.add('escondido'); btnVerNotas.classList.add('escondido'); }
         function popularSeletoresAmistoso() {
             const catCasa = filtroCategoriaCasa.value; const catVisitante = filtroCategoriaVisitante.value;
             const timesCasa = (catCasa === 'ALL' || !catCasa) ? timesDB : timesDB.filter(t => t.categoria === catCasa);
@@ -507,7 +538,7 @@
             const timeVisitante = JSON.parse(JSON.stringify(timesDB.find(t => t.id == idVisitante)));
             partidaJogadores.casa = timeCasa.jogadores.map(j => ({...j, timeNome: timeCasa.nome, gols: 0, assistencias: 0, cartaoAmarelo: false, cartaoVermelho: false}));
             partidaJogadores.visitante = timeVisitante.jogadores.map(j => ({...j, timeNome: timeVisitante.nome, gols: 0, assistencias: 0, cartaoAmarelo: false, cartaoVermelho: false}));
-            areaResultadoAmistoso.classList.remove('escondido'); btnVerNotas.classList.add('escondido');
+            areaSimulacao.classList.remove('escondido'); btnVerNotas.classList.add('escondido');
             const timePlacarCasa = document.getElementById('time-placar-casa');
             const timePlacarVisitante = document.getElementById('time-placar-visitante');
             const placarCentralDiv = document.getElementById('placar-central');
@@ -527,22 +558,30 @@
                 minuto++;
                 placarCentralDiv.innerHTML = `${stats.casa.gols} - ${stats.visitante.gols} <div class="minuto-jogo"><span>${minuto}</span>'</div>`;
                 
-                const posseCasaChance = timeCasa.passe / (timeCasa.passe + timeVisitante.passe);
+                const mentalidadeCasa = mentalidades[taticaSliderCasa.value];
+                const mentalidadeVisitante = mentalidades[taticaSliderVisitante.value];
+                const passeTotal = (timeCasa.passe * mentalidadeCasa.modAtk) + (timeVisitante.passe * mentalidadeVisitante.modAtk);
+                const posseCasaChance = (timeCasa.passe * mentalidadeCasa.modAtk) / passeTotal;
+                
                 const timeComPosse = Math.random() < posseCasaChance ? 'casa' : 'visitante';
 
-                const equipe = timeComPosse === 'casa' ? { id: 'casa', time: timeCasa, stats: stats.casa, logDiv: logCasaDiv, adversario: timeVisitante } : { id: 'visitante', time: timeVisitante, stats: stats.visitante, logDiv: logVisitanteDiv, adversario: timeCasa };
+                const equipe = timeComPosse === 'casa' ? { id: 'casa', time: timeCasa, stats: stats.casa, logDiv: logCasaDiv, adversario: timeVisitante, mentalidade: mentalidadeCasa } : { id: 'visitante', time: timeVisitante, stats: stats.visitante, logDiv: logVisitanteDiv, adversario: timeCasa, mentalidade: mentalidadeVisitante };
+                const mentalidadeAdversaria = timeComPosse === 'casa' ? mentalidadeVisitante : mentalidadeCasa;
+                
                 equipe.stats.posse++;
 
-                const chanceDeAtaque = equipe.time.ataque / 2500;
+                const ataqueEfetivo = equipe.time.ataque * equipe.mentalidade.modAtk;
+                const chanceDeAtaque = ataqueEfetivo / 800;
                 if (Math.random() < chanceDeAtaque) {
                     equipe.stats.chutes++;
                     const jogador = selecionarJogador(partidaJogadores[equipe.id]);
                     if (!jogador) return;
 
-                    const chanceDeGolNoChute = (equipe.time.ataque / (equipe.time.ataque + equipe.adversario.defesa)) * 0.5;
+                    const defesaEfetivaAdversaria = equipe.adversario.defesa * mentalidadeAdversaria.modDef;
+                    const chanceDeGolNoChute = (ataqueEfetivo / (ataqueEfetivo + defesaEfetivaAdversaria)) * 0.55;
                     if (Math.random() < chanceDeGolNoChute) {
                         equipe.stats.chutesNoGol++;
-                        const chanceDeGol = 0.3;
+                        const chanceDeGol = (ataqueEfetivo / (ataqueEfetivo + defesaEfetivaAdversaria)) * 0.7;
                         if (Math.random() < chanceDeGol) {
                             equipe.stats.gols++;
                             jogador.gols++;
@@ -710,6 +749,8 @@
         carregarTimes();
         popularGaleriaEmojis();
         atualizarDisplayVelocidade();
+        atualizarDisplayTatica(taticaSliderCasa, displayTaticaCasa);
+        atualizarDisplayTatica(taticaSliderVisitante, displayTaticaVisitante);
     });
     </script>
 </body>
